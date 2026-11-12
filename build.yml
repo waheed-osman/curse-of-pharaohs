@@ -1,0 +1,62 @@
+name: Build Curse of the Pharaohs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.4'
+          channel: stable
+          cache: false
+      - name: Generate Android project
+        run: flutter create --platforms=android --project-name pharaoh_match --org com.pharaohmatch .
+      - name: Patch manifest
+        run: python3 tool/setup_android.py
+      - run: rm -rf test
+      - run: flutter pub get
+      - name: Anubis app icon
+        run: dart run flutter_launcher_icons -f flutter_launcher_icons-android.yaml
+      - name: Build release APKs (one small APK per CPU type)
+        run: flutter build apk --release --split-per-abi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pharaoh-match-android
+          path: build/app/outputs/flutter-apk/*.apk
+
+  ios:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.4'
+          channel: stable
+          cache: false
+      - name: Generate iOS project
+        run: flutter create --platforms=ios --project-name pharaoh_match --org com.pharaohmatch .
+      - name: Patch Info.plist
+        run: python3 tool/setup_android.py
+      - run: rm -rf test
+      - run: flutter pub get
+      - name: Anubis app icon
+        run: dart run flutter_launcher_icons -f flutter_launcher_icons-ios.yaml
+      - name: Build unsigned iOS app
+        run: flutter build ios --release --no-codesign
+      - name: Zip the app
+        run: |
+          mkdir -p out/Payload
+          cp -R build/ios/iphoneos/Runner.app out/Payload/
+          cd out && zip -qry pharaoh-match-unsigned.ipa Payload
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pharaoh-match-ios-unsigned
+          path: out/pharaoh-match-unsigned.ipa

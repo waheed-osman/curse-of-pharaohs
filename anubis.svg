@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="1024" height="1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#14305C"/>
+      <stop offset="1" stop-color="#0B1D3A"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" fill="url(#bg)"/>
+  <circle cx="50" cy="44" r="36" fill="#D4AF37" opacity="0.18"/>
+  <!-- collar -->
+  <path d="M8 100 A42 42 0 0 1 92 100 Z" fill="#D4AF37" stroke="#2A1A05" stroke-width="1.2"/>
+  <path d="M18 100 A32 32 0 0 1 82 100 Z" fill="#1FA89A" stroke="#2A1A05" stroke-width="1"/>
+  <path d="M26 100 A24 24 0 0 1 74 100 Z" fill="#B5412B" stroke="#2A1A05" stroke-width="1"/>
+  <path d="M33 100 A17 17 0 0 1 67 100 Z" fill="#F3D77A" stroke="#2A1A05" stroke-width="1"/>
+  <!-- head -->
+  <path d="M30 5 L40 30 Q50 26 60 30 L70 5 L76 40 Q76 53 66 59 L58 90 L42 90 L34 59 Q24 53 24 40 Z"
+        fill="#101018" stroke="#D4AF37" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M31 14 L37 32 L33 38 Z" fill="#D4AF37"/>
+  <path d="M69 14 L63 32 L67 38 Z" fill="#D4AF37"/>
+  <!-- snout -->
+  <path d="M43 56 L57 56 L55.5 84 L44.5 84 Z" fill="#2B2B3A"/>
+  <ellipse cx="50" cy="86" rx="7" ry="4" fill="#050508" stroke="#D4AF37" stroke-width="1"/>
+  <path d="M50 56 L50 82" stroke="#D4AF37" stroke-width="0.8" opacity="0.7"/>
+  <!-- eyes -->
+  <path d="M31 46 Q38 40 45 46 Q38 51 31 46 Z" fill="#F3D77A" stroke="#D4AF37" stroke-width="1"/>
+  <path d="M69 46 Q62 40 55 46 Q62 51 69 46 Z" fill="#F3D77A" stroke="#D4AF37" stroke-width="1"/>
+  <circle cx="38" cy="46" r="2.2" fill="#050508"/>
+  <circle cx="62" cy="46" r="2.2" fill="#050508"/>
+  <path d="M31 46 L24 49 M69 46 L76 49" stroke="#D4AF37" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- brow -->
+  <path d="M30 41 Q38 36 46 41 M70 41 Q62 36 54 41" fill="none" stroke="#D4AF37" stroke-width="1.2" stroke-linecap="round"/>
+</svg>
