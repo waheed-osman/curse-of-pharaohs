@@ -50,7 +50,17 @@ jobs:
       - run: flutter pub get
 
       - name: Anubis app icon
-        run: dart run flutter_launcher_icons -f flutter_launcher_icons-android.yaml
+        run: |
+          rm -f flutter_launcher_icons-*.yaml
+          cat > icons_android.yaml <<'EOF'
+          flutter_launcher_icons:
+            android: true
+            ios: false
+            image_path: "assets/icon/icon.png"
+            adaptive_icon_background: "#0B1D3A"
+            adaptive_icon_foreground: "assets/icon/icon_fg.png"
+          EOF
+          dart run flutter_launcher_icons -f icons_android.yaml
 
       - name: Build release APKs
         run: flutter build apk --release --split-per-abi
