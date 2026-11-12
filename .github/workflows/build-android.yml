@@ -1,0 +1,61 @@
+name: Build Curse of the Pharaohs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Put files in their folders
+        run: |
+          organize() {
+            dest="$1"; shift
+            mkdir -p "$dest"
+            for f in "$@"; do
+              if [ -f "$f" ]; then mv "$f" "$dest/"; fi
+            done
+          }
+          organize lib main.dart theme.dart progress.dart
+          organize lib/game board.dart levels.dart
+          organize lib/ui anubis.dart background.dart game_screen.dart menu_screen.dart mummy.dart symbols.dart
+          organize assets/icon icon.png icon_fg.png
+          organize tool anubis.svg setup_android.py
+          find lib assets tool -type f | sort
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.27.4'
+          channel: stable
+          cache: false
+
+      - name: Generate Android project
+        run: |
+          cp -r lib /tmp/lib_backup
+          flutter create --platforms=android --project-name pharaoh_match --org com.pharaohmatch .
+          rm -rf lib test
+          cp -r /tmp/lib_backup lib
+          grep -q EgyptApp lib/main.dart
+
+      - name: Patch app name and orientation
+        run: python3 tool/setup_android.py
+
+      - run: flutter pub get
+
+      - name: Anubis app icon
+        run: dart run flutter_launcher_icons -f flutter_launcher_icons-android.yaml
+
+      - name: Build release APKs
+        run: flutter build apk --release --split-per-abi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: curse-of-pharaohs-android
+          path: build/app/outputs/flutter-apk/*.apk
